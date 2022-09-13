@@ -6,6 +6,7 @@ import com.example.trellox.enums.Role;
 import com.example.trellox.model.Customer;
 import com.example.trellox.repository.CustomerRepository;
 import com.example.trellox.security.JwtUtils;
+import com.example.trellox.security.PasswordUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,6 +46,10 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public TokenDto login(LoginDto loginDto) {
-        return null;
+        Customer customer = customerRepository.findByEmail(loginDto.getEmail())
+                .orElseThrow(()-> new RuntimeException("customer not found"));
+        if (!PasswordUtils.doPasswordsMatch(loginDto.getPassword(),customer.getPassword()))
+            throw new RuntimeException("email or password is wrong");
+        return TokenDto.builder().token(jwtUtils.generateToken(customer)).build();
     }
 }
