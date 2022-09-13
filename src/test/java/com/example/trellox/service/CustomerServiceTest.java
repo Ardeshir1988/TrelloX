@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -44,4 +45,10 @@ public class CustomerServiceTest {
         assertEquals(getSampleCustomer().getRoles().stream().findAny().get(), Role.CUSTOMER);
     }
 
+    @Test
+    public void findCustomerByEmail_emailNotExisted_thenThrowRunException() {
+        when(customerRepository.findByEmail("a.gmail.com")).thenReturn(Optional.empty());
+        Throwable exception = assertThrows(RuntimeException.class, () -> customerService.findCustomerByEmail("a.gmail.com"));
+        assertEquals("customer not found", exception.getMessage());
+    }
 }
