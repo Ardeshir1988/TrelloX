@@ -6,6 +6,7 @@ import com.example.trellox.enums.Role;
 import com.example.trellox.model.Customer;
 import com.example.trellox.repository.CustomerRepository;
 import com.example.trellox.security.JwtUtils;
+import com.example.trellox.security.PasswordUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,7 +79,9 @@ public class CustomerServiceTest {
 
     @Test
     public void loginCustomer_returnTokenDto() {
-        when(customerRepository.findByEmail(getSampleCustomer().getEmail())).thenReturn(Optional.of(getSampleCustomer()));
+        Customer sampleCustomer = getSampleCustomer();
+        sampleCustomer.setPassword(PasswordUtils.bcryptEncryptor(sampleCustomer.getPassword()));
+        when(customerRepository.findByEmail(getSampleCustomer().getEmail())).thenReturn(Optional.of(sampleCustomer));
         TokenDto tokenDto = customerService.login(LoginDto.builder().email(getSampleCustomer().getEmail()).password("pass1234").build());
         assertEquals(Role.CUSTOMER.name(), jwtUtils.getRolesFromJwtToken(tokenDto.getToken()).get(0));
         assertEquals(getSampleCustomer().getEmail(), jwtUtils.getEmailFromToken(tokenDto.getToken()));
