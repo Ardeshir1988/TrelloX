@@ -76,4 +76,11 @@ public class CustomerServiceTest {
         assertEquals("This email is already registered",exception.getMessage());
     }
 
+    @Test
+    public void loginCustomer_returnTokenDto() {
+        when(customerRepository.findByEmail(getSampleCustomer().getEmail())).thenReturn(Optional.of(getSampleCustomer()));
+        TokenDto tokenDto = customerService.login(LoginDto.builder().email(getSampleCustomer().getEmail()).password("pass1234").build());
+        assertEquals(Role.CUSTOMER.name(), jwtUtils.getRolesFromJwtToken(tokenDto.getToken()).get(0));
+        assertEquals(getSampleCustomer().getEmail(), jwtUtils.getEmailFromToken(tokenDto.getToken()));
+    }
 }
