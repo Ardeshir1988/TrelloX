@@ -36,7 +36,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         Customer customer = customerRepository.save(Customer.builder()
                 .email(loginDto.getEmail())
-                .password(loginDto.getPassword())
+                .password(PasswordUtils.bcryptEncryptor(loginDto.getPassword()))
                 .roles(List.of(Role.CUSTOMER))
                 .build());
 
