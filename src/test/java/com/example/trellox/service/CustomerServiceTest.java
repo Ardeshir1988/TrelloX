@@ -20,6 +20,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -63,7 +64,7 @@ public class CustomerServiceTest {
 
     @Test
     public void registerCustomer_returnTokenDto() {
-        when(customerRepository.save(Customer.builder().email(getSampleCustomer().getEmail()).password("pass1234").roles(List.of(Role.CUSTOMER)).build())).thenReturn(getSampleCustomer());
+        when(customerRepository.save(any())).thenReturn(getSampleCustomer());
         TokenDto tokenDto = customerService.register(LoginDto.builder().email(getSampleCustomer().getEmail()).password("pass1234").build());
         assertEquals("customer registered", tokenDto.getMessage());
         assertEquals(Role.CUSTOMER.name(), jwtUtils.getRolesFromJwtToken(tokenDto.getToken()).get(0));
