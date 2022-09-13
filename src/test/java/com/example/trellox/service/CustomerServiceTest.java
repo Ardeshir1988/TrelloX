@@ -86,4 +86,22 @@ public class CustomerServiceTest {
         assertEquals(Role.CUSTOMER.name(), jwtUtils.getRolesFromJwtToken(tokenDto.getToken()).get(0));
         assertEquals(getSampleCustomer().getEmail(), jwtUtils.getEmailFromToken(tokenDto.getToken()));
     }
+
+    @Test
+    public void loginCustomer_emailNotExisted_throwException() {
+        Customer sampleCustomer = getSampleCustomer();
+        sampleCustomer.setPassword(PasswordUtils.bcryptEncryptor(sampleCustomer.getPassword()));
+        when(customerRepository.findByEmail(getSampleCustomer().getEmail())).thenReturn(Optional.empty());
+        Throwable exception = assertThrows(RuntimeException.class, () -> customerService.login(LoginDto.builder().email(getSampleCustomer().getEmail()).password("pass1234").build()));
+        assertEquals("customer not found",exception.getMessage());
+    }
+
+    @Test
+    public void loginCustomer_wrongPassword_throwException() {
+        Customer sampleCustomer = getSampleCustomer();
+        sampleCustomer.setPassword(PasswordUtils.bcryptEncryptor(sampleCustomer.getPassword()));
+        when(customerRepository.findByEmail(getSampleCustomer().getEmail())).thenReturn(Optional.of(sampleCustomer));
+        Throwable exception = assertThrows(RuntimeException.class, () -> customerService.login(LoginDto.builder().email(getSampleCustomer().getEmail()).password("1234pass").build()));
+        assertEquals("email or password is wrong",exception.getMessage());
+    }
 }
