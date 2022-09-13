@@ -63,6 +63,6 @@ public class JwtUtils {
     }
 
     public String getEmailFromToken(String token) {
-        return null;
+        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().get("sub").toString();
     }
 }
