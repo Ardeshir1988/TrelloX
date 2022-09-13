@@ -5,11 +5,13 @@ import com.example.trellox.dto.TokenDto;
 import com.example.trellox.enums.Role;
 import com.example.trellox.model.Customer;
 import com.example.trellox.repository.CustomerRepository;
+import com.example.trellox.security.JwtUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
@@ -20,11 +22,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {CustomerServiceImpl.class})
+@ContextConfiguration(classes = {CustomerServiceImpl.class, JwtUtils.class})
+@TestPropertySource(locations = {"classpath:application.properties"})
 public class CustomerServiceTest {
 
     @Autowired
     private CustomerService customerService;
+
+    @Autowired
+    private JwtUtils jwtUtils;
 
     @MockBean
     private CustomerRepository customerRepository;
