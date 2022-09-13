@@ -17,7 +17,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer findCustomerByEmail(String email) {
-        return null;
+        return customerRepository.findByEmail(email).orElseThrow(()-> new RuntimeException("customer not found"));
     }
 
     @Override
