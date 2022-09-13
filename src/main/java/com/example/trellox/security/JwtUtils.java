@@ -61,4 +61,8 @@ public class JwtUtils {
             throw new RuntimeException("Claims string is empty");
         }
     }
+
+    public String getEmailFromToken(String token) {
+        return null;
+    }
 }

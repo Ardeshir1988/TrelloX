@@ -65,7 +65,7 @@ public class CustomerServiceTest {
         when(customerRepository.save(Customer.builder().email(getSampleCustomer().getEmail()).password("pass1234").roles(List.of(Role.CUSTOMER)).build())).thenReturn(getSampleCustomer());
         TokenDto tokenDto = customerService.register(LoginDto.builder().email(getSampleCustomer().getEmail()).password("pass1234").build());
         assertEquals("customer registered", tokenDto.getMessage());
-        assertEquals(Role.CUSTOMER.name(), tokenDto.getToken());
-        assertEquals(getSampleCustomer().getEmail(), tokenDto.getToken());
+        assertEquals(Role.CUSTOMER.name(), jwtUtils.getRolesFromJwtToken(tokenDto.getToken()).get(0));
+        assertEquals(getSampleCustomer().getEmail(), jwtUtils.getEmailFromToken(tokenDto.getToken()));
     }
 }
