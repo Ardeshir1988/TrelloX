@@ -1,5 +1,7 @@
 package com.example.trellox.service;
 
+import com.example.trellox.dto.LoginDto;
+import com.example.trellox.dto.TokenDto;
 import com.example.trellox.enums.Role;
 import com.example.trellox.model.Customer;
 import com.example.trellox.repository.CustomerRepository;
@@ -31,7 +33,7 @@ public class CustomerServiceTest {
         return Customer.builder()
                 .id("id-1")
                 .email("a.gmail.com")
-                .password("")
+                .password("pass1234")
                 .roles(List.of(Role.CUSTOMER))
                 .build();
     }
@@ -50,5 +52,14 @@ public class CustomerServiceTest {
         when(customerRepository.findByEmail("a.gmail.com")).thenReturn(Optional.empty());
         Throwable exception = assertThrows(RuntimeException.class, () -> customerService.findCustomerByEmail("a.gmail.com"));
         assertEquals("customer not found", exception.getMessage());
+    }
+
+    @Test
+    public void registerCustomer_returnTokenDto() {
+        when(customerRepository.save(Customer.builder().email(getSampleCustomer().getEmail()).password("pass1234").roles(List.of(Role.CUSTOMER)).build())).thenReturn(getSampleCustomer());
+        TokenDto tokenDto = customerService.register(LoginDto.builder().email(getSampleCustomer().getEmail()).password("pass1234").build());
+        assertEquals("customer registered", tokenDto.getMessage());
+        assertEquals(Role.CUSTOMER.name(), tokenDto.getToken());
+        assertEquals(getSampleCustomer().getEmail(), tokenDto.getToken());
     }
 }
