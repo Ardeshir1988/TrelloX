@@ -2,16 +2,31 @@ package com.example.trellox.service;
 
 import com.example.trellox.dto.MemberDto;
 import com.example.trellox.model.Card;
+import com.example.trellox.repository.BoardRepository;
+import com.example.trellox.repository.CardRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class CardServiceImpl implements CardService {
+    private final CardRepository cardRepository;
+    private final BoardRepository boardRepository;
+
+    public CardServiceImpl(CardRepository cardRepository, BoardRepository boardRepository) {
+        this.cardRepository = cardRepository;
+        this.boardRepository = boardRepository;
+    }
 
     @Override
     public Card saveCard(String boardId, Card card) {
-        return null;
+        card.setBoardId(boardId);
+        boardRepository.findById(boardId)
+                .orElseThrow(() -> new RuntimeException("board not found"));
+
+        if (card.getCardTitle()== null || card.getCardTitle().isEmpty())
+            throw new RuntimeException("card title is mandatory");
+        return cardRepository.save(card);
     }
 
     @Override
