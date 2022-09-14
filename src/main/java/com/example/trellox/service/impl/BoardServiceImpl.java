@@ -1,7 +1,8 @@
-package com.example.trellox.service;
+package com.example.trellox.service.impl;
 
 import com.example.trellox.model.Board;
 import com.example.trellox.repository.BoardRepository;
+import com.example.trellox.service.BoardService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.example.trellox.service;
+package com.example.trellox.service.impl;
 
 import com.example.trellox.dto.LoginDto;
 import com.example.trellox.dto.TokenDto;
@@ -7,6 +7,7 @@ import com.example.trellox.model.Customer;
 import com.example.trellox.repository.CustomerRepository;
 import com.example.trellox.security.JwtUtils;
 import com.example.trellox.security.PasswordUtils;
+import com.example.trellox.service.CustomerService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

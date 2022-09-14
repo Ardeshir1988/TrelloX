@@ -7,6 +7,7 @@ import com.example.trellox.model.Customer;
 import com.example.trellox.repository.CustomerRepository;
 import com.example.trellox.security.JwtUtils;
 import com.example.trellox.security.PasswordUtils;
+import com.example.trellox.service.impl.CustomerServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
